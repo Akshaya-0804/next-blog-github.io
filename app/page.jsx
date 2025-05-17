@@ -1,5 +1,5 @@
-import PostCard from "@/components/PostCard";
-import { getCollection } from "@/lib/db";
+import PostCard from "./components/PostCard";
+import { getCollection } from "../src/actions/lib/db";
 
 export default async function Home() {
     

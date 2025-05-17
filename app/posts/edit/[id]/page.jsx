@@ -1,13 +1,14 @@
 import { updatePost } from "@/actions/posts";
 import BlogForm from "@/components/BlogForm";
-import { getCollection } from "@/lib/db";
-import getAuthUser from "@/lib/getAuthUser";
+import { getCollection } from "../src/actions/lib/db";
+import getAuthUser from "../../lib/getAuthUser";
 import { ObjectId } from "mongodb";
 import { redirect } from "next/navigation";
 
-export default async function Edit({ params }) {
+export default async function Edit({ params }) 
   // Id parameter from page params
   const { id } = await params;
+  
 
   // Get the auth user from cookies
   const user = await getAuthUser();

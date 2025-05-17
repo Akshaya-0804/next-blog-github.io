@@ -1,7 +1,7 @@
 "use server";
 
-import { getCollection } from "@/lib/db";
-import getAuthUser from "/lib/getAuthUser";
+import { getCollection } from "../src/actions/lib/db";
+import getAuthUser from "../../lib/getAuthUser";
 import { BlogPostSchema } from "@/lib/rules";
 import { ObjectId } from "mongodb";
 import { revalidatePath } from "next/cache";
