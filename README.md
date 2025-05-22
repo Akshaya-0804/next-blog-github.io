@@ -266,11 +266,11 @@ Server actions are defined in `src/actions/`. These are functions that perform s
 
 - Utility-first CSS framework.
 - Enables rapid UI development with predefined utility classes.
-- Defined in `globals.css`.
+- Defined in `globals.css`. 
 
 ---
 
-## 📂 Database Connection - src/actions/lib/db.js
+## 📂 Database Connection - `src/actions/lib/db.js`
 
 ### Purpose
 
@@ -279,7 +279,7 @@ This file manages the MongoDB client connection, ensuring a single reusable inst
 ### Key Components:
 
  - MongoClient Setup:
-  '''
+```
   import { MongoClient, ServerApiVersion } from "mongodb";
 const client = new MongoClient(process.env.DB_URI, {
   serverApi: {
@@ -287,7 +287,7 @@ const client = new MongoClient(process.env.DB_URI, {
     strict: true,
     deprecationErrors: true,
   }
-'''
+```
 
 - Connects to MongoDB using the connection string from environment variable DB_URI.
     
@@ -297,7 +297,7 @@ const client = new MongoClient(process.env.DB_URI, {
 
     Throws an error immediately if DB_URI is missing to prevent runtime failures.
 
-- 'getDB(dbName)' (async function):
+- getDB(dbName) (async function):
 
 - Connects the MongoDB client.
 
@@ -321,7 +321,7 @@ Handles user registration, login, and logout functionality on the server side.
 
 ### Functions:
 
-- 'register(state, formData)'
+-  `register(state, formData)`
   
    - Validates form input using RegisterFormSchema.
    
@@ -337,7 +337,7 @@ Handles user registration, login, and logout functionality on the server side.
    
    - Returns validation or server errors if any.
 
-- 'login(state, formData)'
+- `login(state, formData)`
 
   -Validates input via LoginFormSchema.
   
@@ -351,7 +351,7 @@ Handles user registration, login, and logout functionality on the server side.
     
     - Returns errors on validation failure or invalid credentials.
 
-- 'logout()'
+- `login()`
   
  - Deletes the session cookie.
    
@@ -359,7 +359,7 @@ Handles user registration, login, and logout functionality on the server side.
 
 ---
 
-### Validation Rules - 'src/actions/lib/rules.js'
+### Validation Rules - `src/actions/lib/rules.js`
 
 ### Purpose
 
@@ -367,13 +367,13 @@ Defines data validation schemas for login, registration, and blog posts using Zo
 
 ### Schemas:
 
-  - 'LoginFormSchema'
+  - `LoginFormSchema`
 
     - Requires a valid email.
 
     - Requires a non-empty password.
 
-  - 'RegisterFormSchema'
+  - `RegisterFormSchema`
 
     - Requires valid email.
 
@@ -383,7 +383,7 @@ Defines data validation schemas for login, registration, and blog posts using Zo
 
     - Custom error messages defined for each rule.
 
-  - 'BlogPostSchema'
+  - `BlogPostSchema`
 
     - Title: Required, 1-100 characters max.
 
@@ -401,7 +401,7 @@ Handles creation and verification of JWT-based sessions stored in HTTP-only cook
 
 ### Key Components:
 
-- 'encrypt(payload)'
+- `encrypt(payload)`
 
   - Signs a JWT token with HS256 algorithm.
 
@@ -409,7 +409,7 @@ Handles creation and verification of JWT-based sessions stored in HTTP-only cook
 
   - Uses a secret key from environment variable SESSION_SECRET.
 
-- decrypt(session)
+- `decypt(session)`
 
   - Verifies the JWT token.
 
@@ -417,7 +417,7 @@ Handles creation and verification of JWT-based sessions stored in HTTP-only cook
 
   - Logs error on verification failure.
 
-- createSession(userId)
+- `createSession(userId)`
 
   - Creates a JWT session token with the userId and expiration date.
 
@@ -425,7 +425,7 @@ Handles creation and verification of JWT-based sessions stored in HTTP-only cook
 
 ---
 
-### Get Authenticated User - src/actions/lib/getAuthUser.js
+### Get Authenticated User - `src/actions/lib/getAuthUser.js`
 
 ### Purpose
 
@@ -433,7 +433,7 @@ Retrieves and decrypts the currently authenticated user based on the "session" c
 
 ### Function:
 
-- getAuthUser() (async)
+- `getAuthUser() (async)`
 
   - Reads the "session" cookie from the request headers.
 
@@ -443,7 +443,7 @@ Retrieves and decrypts the currently authenticated user based on the "session" c
  
   ---
 
-  ## Post Operations - src/actions/posts.js
+  ## Post Operations - `src/actions/posts.js`
 
   ### Purpose
 
@@ -451,7 +451,7 @@ Retrieves and decrypts the currently authenticated user based on the "session" c
 
   ### Functions:
 
-- createPost(state, formData)
+- `createPost(state, formData)`
 
   - Requires authenticated user.
 
@@ -461,7 +461,7 @@ Retrieves and decrypts the currently authenticated user based on the "session" c
 
   - Redirects to /dashboard on success.
 
-- updatePost(state, formData)
+- `updatePost(state, formData)`
 
   - Requires authenticated user.
 
@@ -473,7 +473,7 @@ Retrieves and decrypts the currently authenticated user based on the "session" c
 
   - Redirects to /dashboard.
 
-- deletePost(formData)
+- `deletePost(state, formData)`
 
   - Requires authenticated user.
 
@@ -489,7 +489,7 @@ Retrieves and decrypts the currently authenticated user based on the "session" c
  
   ---
 
-  ## Middleware - Route Protection - src/actions/middleware.js
+  ## Middleware - Route Protection -  `src/actions/middleware.js`
 
   ### Purpose
 
@@ -507,7 +507,7 @@ Retrieves and decrypts the currently authenticated user based on the "session" c
 
 - Otherwise, allows the request to proceed.
 
-- Uses getAuthUser() to determine the current user from cookies.
+- Uses    `getAuthUser()` to determine the current user from cookies.
 
 - matcher config ensures the middleware applies to specified paths.
 
