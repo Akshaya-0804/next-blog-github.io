@@ -1,27 +1,21 @@
 "use server";
 
-import { getCollection } from "../src/actions/lib/db";
-import getAuthUser from "../../lib/getAuthUser";
-import { BlogPostSchema } from "@/lib/rules";
+import { getCollection } from "./lib/db";
+import getAuthUser from "./lib/getAuthUser";
+import { BlogPostSchema } from "./lib/rules";
 import { ObjectId } from "mongodb";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function createPost(state, formData) {
-  // Check is user is signed in
   const user = await getAuthUser();
-  //if (!user) return redirect("/");
+  if (!user) return redirect("/");
 
-  // Validate form fields
   const title = formData.get("title");
   const content = formData.get("content");
 
-  const validatedFields = BlogPostSchema.safeParse({
-    title,
-    content,
-  });
+  const validatedFields = BlogPostSchema.safeParse({ title, content });
 
-  // If any form fields are invalid
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
@@ -30,7 +24,6 @@ export async function createPost(state, formData) {
     };
   }
 
-  // Save the new post in DB
   try {
     const postsCollection = await getCollection("posts");
     const post = {
@@ -45,26 +38,23 @@ export async function createPost(state, formData) {
     };
   }
 
-  // Redirect
-  redirect("/dashboard");
+  return redirect("/dashboard");
 }
+
 export async function updatePost(state, formData) {
-  // Check is user is signed in
   const user = await getAuthUser();
-  console.log(formData.get("postId"));
   if (!user) return redirect("/");
 
-  // Validate form fields
   const title = formData.get("title");
   const content = formData.get("content");
   const postId = formData.get("postId");
 
-  const validatedFields = BlogPostSchema.safeParse({
-    title,
-    content,
-  });
+  if (!postId || postId.length !== 24) {
+    return redirect("/");
+  }
 
-  // If any form fields are invalid
+  const validatedFields = BlogPostSchema.safeParse({ title, content });
+
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
@@ -72,35 +62,57 @@ export async function updatePost(state, formData) {
       content,
     };
   }
-  const postsCollection = await getCollection('posts')
+
+  const postsCollection = await getCollection("posts");
   const post = await postsCollection.findOne({
     _id: ObjectId.createFromHexString(postId),
-  })
-  if (user.userId != post.userId.toString()) return redirect("/");
-  postsCollection.findOneAndUpdate({_id: post._id},{
-    $set: {
-      title: validatedFields.data.title,
-      content:validatedFields.data.content,
+  });
+
+  if (!post) {
+    return redirect("/");
+  }
+
+  if (user.userId !== post.userId.toString()) {
+    return redirect("/");
+  }
+
+  await postsCollection.findOneAndUpdate(
+    { _id: post._id },
+    {
+      $set: {
+        title: validatedFields.data.title,
+        content: validatedFields.data.content,
+      },
     }
-  })
+  );
 
-  
-  // Update the post in DB
- 
-  // Redirect
-  redirect("/dashboard");
+  return redirect("/dashboard");
 }
+
 export async function deletePost(formData) {
-  const user = await getAuthUser();;
-  if (!user) return redirect("/");
-  const postsCollection = await getCollection('posts')
+  const user = await getAuthUser();
+  if (!user || !userId) return redirect("/");
+
+  const postId = formData.get("postId");
+  if (!postId || postId.length !== 24) {
+    return redirect("/");
+  }
+
+  const postsCollection = await getCollection("posts");
   const post = await postsCollection.findOne({
-    _id: ObjectId.createFromHexString(formData.get("postId")),
-  })
-  if (user.userId !== post.userId.toString()) return redirect("/");
+    _id: ObjectId.createFromHexString(postId),
+  });
 
-  postsCollection.findOneAndDelete({ _id: post._id });
-  revalidatePath('/dashboard')
+  if (!post || !post.userId) {
+    return redirect("/");
+  }
 
-  
+  if (user.userId !== post.userId.toString()) {
+    return redirect("/");
+  }
+
+  await postsCollection.findOneAndDelete({ _id: post._id });
+
+  revalidatePath("/dashboard");
+  return redirect("/dashboard");
 }

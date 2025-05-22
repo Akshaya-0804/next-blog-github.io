@@ -1,11 +1,11 @@
 "use server";
 
 import bcrypt from "bcrypt";
-import { getCollection } from "../src/actions/lib/db";
-import { LoginFormSchema, RegisterFormSchema } from "@/lib/rules";
+import { getCollection } from "./lib/db";
+import { LoginFormSchema, RegisterFormSchema } from "./lib/rules";
 import { redirect } from "next/navigation";
-import { createSession } from "@/lib/sessions";
-
+import { createSession } from "./lib/sessions";
+import { cookies } from "next/headers";
 export async function register(state, formData) {
   // await new Promise((resolve) => setTimeout(resolve, 3000));
 
@@ -94,7 +94,7 @@ export async function login(state, formData) {
   redirect('/dashboard')
 }
 export async function logout() {
-    const cookieStore = await cookies();
+    const cookieStore = cookies();
     cookieStore.delete("session");
     redirect("/");
 

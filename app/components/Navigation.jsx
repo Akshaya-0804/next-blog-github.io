@@ -1,5 +1,7 @@
-import getAuthUser from "@lib/getAuthUser";
+import getAuthUser from "../../src/actions/lib/getAuthUser";
 import NavLink from "./NavLink";
+import { logout } from "../../src/actions/auth"; 
+
 
 export default async function Navigation() {
   const authUser = await getAuthUser();

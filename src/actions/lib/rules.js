@@ -31,9 +31,9 @@ export const RegisterFormSchema = z
     }
   });
   export const BlogPostSchema = z.object({
-    title: string()
+    title: z.string()
       .min(1, {messgae: "Title field is required."})
       .max(100, {message: "Title  can't be more than 100 characters "})
       .trim(),
-    content: string().min(1, { message: "Content field is"}).trim(),
+    content: z.string().min(1, { message: "Content field is"}).trim(),
   });

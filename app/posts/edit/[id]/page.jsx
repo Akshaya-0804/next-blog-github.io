@@ -1,36 +1,45 @@
-import { updatePost } from "@/actions/posts";
-import BlogForm from "@/components/BlogForm";
-import { getCollection } from "../src/actions/lib/db";
-import getAuthUser from "../../lib/getAuthUser";
+import { updatePost } from "../../../../src/actions/posts";
+import BlogForm from "../../../components/BlogForm";
+
+import { getCollection } from "../../../../src/actions/lib/db";
+import getAuthUser from "../../../../src/actions/lib/getAuthUser";
 import { ObjectId } from "mongodb";
 import { redirect } from "next/navigation";
 
-export default async function Edit({ params }) 
-  // Id parameter from page params
-  const { id } = await params;
-  
+export default async function Edit({ params }) {
+  const id = params?.id;
 
-  // Get the auth user from cookies
+  if (!id) {
+    return redirect("/dashboard");
+  }
+
   const user = await getAuthUser();
-
   const postsCollection = await getCollection("posts");
-  let post;
+
+  let post = null;
+
   if (id.length === 24 && postsCollection) {
-    // Get the current post from DB
-    post = await postsCollection.findOne({
-      _id: ObjectId.createFromHexString(id),
-    });
-    post = JSON.parse(JSON.stringify(post));
-    // check if auth user owns the post
-    if (user.userId !== post.userId) return redirect("/");
-  } else {
-    post = null;
+    try {
+      const foundPost = await postsCollection.findOne({
+        _id: new ObjectId(id),
+      });
+
+      if (!foundPost) return redirect("/");
+
+      // 🔐 Check user ownership
+      if (user?.userId !== foundPost?.userId?.toString()) {
+        return redirect("/");
+      }
+
+      post = JSON.parse(JSON.stringify(foundPost));
+    } catch (error) {
+      console.error("Error fetching post:", error);
+    }
   }
 
   return (
     <div className="container w-1/2">
       <h1 className="title">Edit your post</h1>
-
       {post ? (
         <BlogForm handler={updatePost} post={post} />
       ) : (

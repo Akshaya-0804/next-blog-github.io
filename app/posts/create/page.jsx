@@ -1,5 +1,6 @@
-import { createPost } from "./actions/posts";
-import BlogForm from "./components/BlogForm";
+import { createPost } from "../../../src/actions/posts";
+import BlogForm from "../../components/BlogForm";
+
 
 export default async function create() {
   return (

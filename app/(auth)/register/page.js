@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { register } from "@/actions/auth";
+import { register } from "./actions/auth";
 import Link from "next/link";
 
 export default function Register() {
