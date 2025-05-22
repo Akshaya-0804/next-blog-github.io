@@ -223,8 +223,6 @@ From `package.json`:
 ---
 ## 🧩 Backend Login for src/actions
 
-## 🧠 Understanding of Next.js Concepts
-
 ### 1. App Directory Structure
 
 Next.js uses the `app/` directory for defining routes. Each folder represents a route. Special files like `page.jsx`, `layout.jsx`, and `loading.jsx` define content, layout, and loading behavior.
@@ -280,7 +278,8 @@ This file manages the MongoDB client connection, ensuring a single reusable inst
 
 ### Key Components:
 
-- MongoClient Setup:
+MongoClient Setup:
+  
   import { MongoClient, ServerApiVersion } from "mongodb";
 const client = new MongoClient(process.env.DB_URI, {
   serverApi: {
@@ -290,12 +289,13 @@ const client = new MongoClient(process.env.DB_URI, {
   }
 });
 
-- Connects to MongoDB using the connection string from environment variable DB_URI.
-- Uses MongoDB Server API v1 with strict and deprecation error checking enabled.
+  - Connects to MongoDB using the connection string from environment variable DB_URI.
+    
+  - Uses MongoDB Server API v1 with strict and deprecation error checking enabled.
 
 - Error Handling:
 
-Throws an error immediately if DB_URI is missing to prevent runtime failures.
+    Throws an error immediately if DB_URI is missing to prevent runtime failures.
 
 - getDB(dbName) (async function):
 
@@ -322,6 +322,7 @@ Handles user registration, login, and logout functionality on the server side.
 ### Functions:
 
 - register(state, formData)
+  
    - Validates form input using RegisterFormSchema.
    
    - Checks if the email already exists in the users collection.
@@ -337,15 +338,23 @@ Handles user registration, login, and logout functionality on the server side.
    - Returns validation or server errors if any.
 
 -login(state, formData)
- -Validates input via LoginFormSchema.
+
+  -Validates input via LoginFormSchema.
+  
     - Checks if the user exists.
+    
     - Verifies password using bcrypt.
+    
     - Creates session cookie.
+    
     - Redirects to /dashboard on success.
+    
     - Returns errors on validation failure or invalid credentials.
 
 - logout()
+  
  - Deletes the session cookie.
+   
  - Redirects to the home page (/).
 
 ---
@@ -358,29 +367,29 @@ Defines data validation schemas for login, registration, and blog posts using Zo
 
 ### Schemas:
 
-- LoginFormSchema
+  - LoginFormSchema
 
-  - Requires a valid email.
+    - Requires a valid email.
 
-  - Requires a non-empty password.
+    - Requires a non-empty password.
 
-- RegisterFormSchema
+  - RegisterFormSchema
 
-  - Requires valid email.
+    - Requires valid email.
 
-  - Password must be at least 5 characters, contain at least one letter, one number, and one special character.
+    - Password must be at least 5 characters, contain at least one letter, one number, and one special character.
 
-  - confirmPassword must match password.
+    - confirmPassword must match password.
 
-  - Custom error messages defined for each rule.
+    - Custom error messages defined for each rule.
 
-- BlogPostSchema
+  - BlogPostSchema
 
-  - Title: Required, 1-100 characters max.
+    - Title: Required, 1-100 characters max.
 
-  - Content: Required, non-empty.
+    - Content: Required, non-empty.
 
-  - Includes custom error messages.
+    - Includes custom error messages.
 
 ---
 
