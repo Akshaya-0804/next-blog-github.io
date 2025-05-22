@@ -441,9 +441,9 @@ Retrieves and decrypts the currently authenticated user based on the "session" c
 
   - Returns the user payload or undefined if no valid session exists.
  
-  ---
+---
 
-  ### Post Operations - `src/actions/posts.js`
+### Post Operations - `src/actions/posts.js`
 
   ### Purpose
 
@@ -486,10 +486,10 @@ Retrieves and decrypts the currently authenticated user based on the "session" c
   - Triggers cache revalidation on /dashboard.
 
   - Redirects to /dashboard.
- 
-  ---
 
-  ### Middleware - Route Protection -  `src/actions/middleware.js`
+---
+
+### Middleware - Route Protection -  `src/actions/middleware.js`
 
   ### Purpose
 
