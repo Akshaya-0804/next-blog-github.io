@@ -393,7 +393,7 @@ Defines data validation schemas for login, registration, and blog posts using Zo
 
 ---
 
-### Session Management - 'src/actions/lib/sessions.js'
+### Session Management - `src/actions/lib/sessions.js`
 
 ### Purpose
 
@@ -443,7 +443,7 @@ Retrieves and decrypts the currently authenticated user based on the "session" c
  
   ---
 
-  ## Post Operations - `src/actions/posts.js`
+  ### Post Operations - `src/actions/posts.js`
 
   ### Purpose
 
@@ -489,7 +489,7 @@ Retrieves and decrypts the currently authenticated user based on the "session" c
  
   ---
 
-  ## Middleware - Route Protection -  `src/actions/middleware.js`
+  ### Middleware - Route Protection -  `src/actions/middleware.js`
 
   ### Purpose
 
@@ -513,7 +513,7 @@ Retrieves and decrypts the currently authenticated user based on the "session" c
 
 ---
 
-## Environment Variables - src/actions/env
+### Environment Variables - src/actions/env
 
 ### Purpose
 
