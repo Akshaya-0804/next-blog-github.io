@@ -110,25 +110,414 @@ From `package.json`:
 
 ---
 
-## 🧩 Detailed Component and File Descriptions
+## 🧩 Backend Login for src/actions/
+### 1. `app/(auth)/register/page.js`
 
-### 📂 `/app`
-Handles routing using the **App Router** (`page.tsx`, `layout.tsx`, etc.)
+- **Imports:**
+  - `useActionState` from React for managing form state.
+  - `register` function from `./actions/auth` to handle registration.
+  - `Link` from Next.js for navigation.
 
-- `page.tsx`: Root route of the application (home page).
-- `layout.tsx`: Common layout wrapper for all routes, includes global styles and metadata.
-- Subdirectories likely represent route segments.
+- **Functionality:**
+  - Uses `useActionState` to handle form submission.
+  - Renders a form for user registration.
+  - Displays server-side validation errors.
+  - Includes link to login page.
 
-### 📂 `/src`
+---
 
-Contains the core logic and reusable parts:
+### 2. `components/BlogForm.jsx`
 
-- `components/`: Reusable UI components (e.g., `Navbar`, `Footer`, `PostCard`)
-- `lib/`: Utility functions (e.g., markdown parsing, date formatting)
-- `styles/`: Tailwind and global CSS
+- **Props:**
+  - `handler`: Function to handle form submission.
+  - `post`: Optional post data for edit functionality.
 
-Each component is written in TypeScript for type safety.
+- **Functionality:**
+  - Uses `useActionState` to manage form state.
+  - Renders fields for title and content.
+  - Handles both create and edit use cases.
 
+---
+
+### 3. `components/Footer.jsx`
+
+- Renders the footer with:
+  - Current year.
+  - Attribution link with SVG icon.
+
+---
+
+### 4. `components/Navigation.jsx`
+
+- **Imports:**
+  - `getAuthUser`: Checks if user is authenticated.
+  - `NavLink`: Custom active-aware link component.
+  - `logout`: Function to handle logout.
+
+- **Functionality:**
+  - Conditionally renders navigation items based on authentication.
+  - Displays logout button if authenticated.
+
+---
+
+### 5. `components/NavLink.jsx`
+
+- Uses `usePathname` to determine the current route.
+- Applies active class styling to the current route.
+
+---
+
+### 6. `components/PostCard.jsx`
+
+- **Props:**
+  - `post`: Post object to render.
+
+- **Functionality:**
+  - Shows post creation date.
+  - Links to full post.
+  - Displays snippet of content.
+
+---
+
+### 7. `app/dashboard/page.jsx`
+
+- Fetches posts for the authenticated user.
+- Renders `PostCard` components for each post.
+
+---
+
+### 8. `app/posts/create/edit/[id]/page.jsx`
+
+- Retrieves post by ID from the URL.
+- Ensures current user is the post's owner.
+- Renders `BlogForm` with existing post data.
+
+---
+
+### 9. `app/globals.css`
+
+- Global styles using Tailwind CSS.
+- Includes base element styling and utility classes.
+
+---
+
+### 10. `app/layout.jsx`
+
+- Application root layout.
+- Renders `Navigation` and `Footer`.
+- Applies global styles and layout structure.
+
+---
+
+### 11. `app/loading.jsx`
+
+- Displays a loading spinner while pages load.
+
+---
+
+### 12. `app/page.jsx`
+
+- Home page of the blog.
+- Displays a list of all posts using `PostCard`.
+
+---
+## 🧩 Backend Login for src/actions
+
+## 🧠 Understanding of Next.js Concepts
+
+### 1. App Directory Structure
+
+Next.js uses the `app/` directory for defining routes. Each folder represents a route. Special files like `page.jsx`, `layout.jsx`, and `loading.jsx` define content, layout, and loading behavior.
+
+---
+
+### 2. Server vs Client Components
+
+- **Server Components**: Default for components in `app/`. Rendered on server, more performant.
+- **Client Components**: Must be marked with `"use client"` when using hooks like `useState`, `useEffect`, or event listeners.
+
+---
+
+### 3. `useActionState` Hook
+
+Used for form state management in React Server Components. Provides a way to handle state and errors returned from server actions.
+
+---
+
+### 4. Routing and Dynamic Routes
+
+Dynamic routes are declared using brackets, e.g., `[id].jsx`. This allows route parameters to be passed via URL.
+
+---
+
+### 5. API Routes and Server Actions
+
+Server actions are defined in `src/actions/`. These are functions that perform server-side logic like authentication or database CRUD operations.
+
+---
+
+### 6. Authentication
+
+- `getAuthUser`: Returns logged-in user's session info.
+- `logout`: Clears session and logs out user.
+- Conditional rendering is based on user auth state.
+
+---
+
+### 7. Styling with Tailwind CSS
+
+- Utility-first CSS framework.
+- Enables rapid UI development with predefined utility classes.
+- Defined in `globals.css`.
+
+---
+
+## 📂 Database Connection - src/actions/lib/db.js
+
+### Purpose
+
+This file manages the MongoDB client connection, ensuring a single reusable instance. It provides helper functions to get a database and collections from MongoDB.
+
+### Key Components:
+
+- MongoClient Setup:
+  import { MongoClient, ServerApiVersion } from "mongodb";
+const client = new MongoClient(process.env.DB_URI, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
+});
+
+- Connects to MongoDB using the connection string from environment variable DB_URI.
+- Uses MongoDB Server API v1 with strict and deprecation error checking enabled.
+
+- Error Handling:
+
+Throws an error immediately if DB_URI is missing to prevent runtime failures.
+
+- getDB(dbName) (async function):
+
+- Connects the MongoDB client.
+
+- Returns the database instance for the given database name.
+
+- Logs a connection success message or logs errors.
+
+- getCollection(collectionName) (async function):
+
+- Retrieves the 'next_blog_db' database.
+
+- Returns a collection object for the specified collection name or null if DB retrieval fails.
+
+---
+
+### User Authentication - src/actions/auth.js
+
+### Purpose
+
+Handles user registration, login, and logout functionality on the server side.
+
+### Functions:
+
+- register(state, formData)
+   - Validates form input using RegisterFormSchema.
+   
+   - Checks if the email already exists in the users collection.
+   
+   - Hashes the password with bcrypt.
+   
+   - Inserts the new user in the DB.
+   
+   - Creates a session cookie.
+   
+   - Redirects to /dashboard on success.
+   
+   - Returns validation or server errors if any.
+
+-login(state, formData)
+ -Validates input via LoginFormSchema.
+    - Checks if the user exists.
+    - Verifies password using bcrypt.
+    - Creates session cookie.
+    - Redirects to /dashboard on success.
+    - Returns errors on validation failure or invalid credentials.
+
+- logout()
+ - Deletes the session cookie.
+ - Redirects to the home page (/).
+
+---
+
+### Validation Rules - src/actions/lib/rules.js
+
+### Purpose
+
+Defines data validation schemas for login, registration, and blog posts using Zod.
+
+### Schemas:
+
+- LoginFormSchema
+
+  - Requires a valid email.
+
+  - Requires a non-empty password.
+
+- RegisterFormSchema
+
+  - Requires valid email.
+
+  - Password must be at least 5 characters, contain at least one letter, one number, and one special character.
+
+  - confirmPassword must match password.
+
+  - Custom error messages defined for each rule.
+
+- BlogPostSchema
+
+  - Title: Required, 1-100 characters max.
+
+  - Content: Required, non-empty.
+
+  - Includes custom error messages.
+
+---
+
+### Session Management - src/actions/lib/sessions.js
+
+### Purpose
+
+Handles creation and verification of JWT-based sessions stored in HTTP-only cookies.
+
+### Key Components:
+
+- encrypt(payload)
+
+  - Signs a JWT token with HS256 algorithm.
+
+  - Sets issued at and expiration time of 7 days.
+
+  - Uses a secret key from environment variable SESSION_SECRET.
+
+- decrypt(session)
+
+  - Verifies the JWT token.
+
+  - Returns the decoded payload if valid.
+
+  - Logs error on verification failure.
+
+- createSession(userId)
+
+  - Creates a JWT session token with the userId and expiration date.
+
+  - Sets a secure, HTTP-only cookie named "session" on the response with 7-day expiry.
+
+---
+
+### Get Authenticated User - src/actions/lib/getAuthUser.js
+
+### Purpose
+
+Retrieves and decrypts the currently authenticated user based on the "session" cookie.
+
+### Function:
+
+- getAuthUser() (async)
+
+  - Reads the "session" cookie from the request headers.
+
+  - Decrypts the JWT token to get the user info.
+
+  - Returns the user payload or undefined if no valid session exists.
+ 
+  ---
+
+  ## Post Operations - src/actions/posts.js
+
+  ### Purpose
+
+  CRUD operations for blog posts, accessible only to authenticated users.
+
+  ### Functions:
+
+- createPost(state, formData)
+
+  - Requires authenticated user.
+
+  - Validates post title and content.
+
+  - Inserts the post into the posts collection with reference to the user ID.
+
+  - Redirects to /dashboard on success.
+
+- updatePost(state, formData)
+
+  - Requires authenticated user.
+
+  - Validates updated title and content.
+
+  - Checks if the post exists and belongs to the authenticated user.
+
+  - Updates the post in the database.
+
+  - Redirects to /dashboard.
+
+- deletePost(formData)
+
+  - Requires authenticated user.
+
+  - Validates post ID.
+
+  - Checks post ownership.
+
+  - Deletes the post from the DB.
+
+  - Triggers cache revalidation on /dashboard.
+
+  - Redirects to /dashboard.
+ 
+  ---
+
+  ## Middleware - Route Protection - src/actions/middleware.js
+
+  ### Purpose
+
+  Protects routes based on user authentication state.
+
+  ### Logic:
+
+- Defines protected routes: /dashboard, /post/create, /posts/edit/*
+
+- Defines public routes: /login, /register
+
+- If user tries to access a protected route without authentication, redirects to /login.
+
+- If an authenticated user accesses a public route, redirects to /dashboard.
+
+- Otherwise, allows the request to proceed.
+
+- Uses getAuthUser() to determine the current user from cookies.
+
+- matcher config ensures the middleware applies to specified paths.
+
+---
+
+## Environment Variables - src/actions/env
+
+### Purpose
+
+Stores sensitive configuration variables.
+
+DB_URI="mongodb+srv://username:password@cluster.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+SESSION_SECRET="random_secret_key_for_jwt"
+
+- DB_URI - MongoDB connection string.
+
+- SESSION_SECRET - Secret key used for signing and verifying JWT sessions.
+
+--- 
 ### 📂 `/public`
 
 Static files such as:
@@ -157,6 +546,8 @@ Static files such as:
 - Optimized for **Vercel deployment**
 
 ---
+
+
 
 ## 💡 My Understanding of Next.js
 
