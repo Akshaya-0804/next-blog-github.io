@@ -278,8 +278,8 @@ This file manages the MongoDB client connection, ensuring a single reusable inst
 
 ### Key Components:
 
-MongoClient Setup:
-  
+ - MongoClient Setup:
+  '''
   import { MongoClient, ServerApiVersion } from "mongodb";
 const client = new MongoClient(process.env.DB_URI, {
   serverApi: {
@@ -287,17 +287,17 @@ const client = new MongoClient(process.env.DB_URI, {
     strict: true,
     deprecationErrors: true,
   }
-});
+'''
 
-  - Connects to MongoDB using the connection string from environment variable DB_URI.
+- Connects to MongoDB using the connection string from environment variable DB_URI.
     
-  - Uses MongoDB Server API v1 with strict and deprecation error checking enabled.
+- Uses MongoDB Server API v1 with strict and deprecation error checking enabled.
 
 - Error Handling:
 
     Throws an error immediately if DB_URI is missing to prevent runtime failures.
 
-- getDB(dbName) (async function):
+- 'getDB(dbName)' (async function):
 
 - Connects the MongoDB client.
 
@@ -305,7 +305,7 @@ const client = new MongoClient(process.env.DB_URI, {
 
 - Logs a connection success message or logs errors.
 
-- getCollection(collectionName) (async function):
+- 'getCollection(collectionName)' (async function):
 
 - Retrieves the 'next_blog_db' database.
 
@@ -313,7 +313,7 @@ const client = new MongoClient(process.env.DB_URI, {
 
 ---
 
-### User Authentication - src/actions/auth.js
+### User Authentication - 'src/actions/auth.js'
 
 ### Purpose
 
@@ -321,7 +321,7 @@ Handles user registration, login, and logout functionality on the server side.
 
 ### Functions:
 
-- register(state, formData)
+- 'register(state, formData)'
   
    - Validates form input using RegisterFormSchema.
    
@@ -337,7 +337,7 @@ Handles user registration, login, and logout functionality on the server side.
    
    - Returns validation or server errors if any.
 
--login(state, formData)
+- 'login(state, formData)'
 
   -Validates input via LoginFormSchema.
   
@@ -351,7 +351,7 @@ Handles user registration, login, and logout functionality on the server side.
     
     - Returns errors on validation failure or invalid credentials.
 
-- logout()
+- 'logout()'
   
  - Deletes the session cookie.
    
@@ -359,7 +359,7 @@ Handles user registration, login, and logout functionality on the server side.
 
 ---
 
-### Validation Rules - src/actions/lib/rules.js
+### Validation Rules - 'src/actions/lib/rules.js'
 
 ### Purpose
 
@@ -367,13 +367,13 @@ Defines data validation schemas for login, registration, and blog posts using Zo
 
 ### Schemas:
 
-  - LoginFormSchema
+  - 'LoginFormSchema'
 
     - Requires a valid email.
 
     - Requires a non-empty password.
 
-  - RegisterFormSchema
+  - 'RegisterFormSchema'
 
     - Requires valid email.
 
@@ -383,7 +383,7 @@ Defines data validation schemas for login, registration, and blog posts using Zo
 
     - Custom error messages defined for each rule.
 
-  - BlogPostSchema
+  - 'BlogPostSchema'
 
     - Title: Required, 1-100 characters max.
 
@@ -393,7 +393,7 @@ Defines data validation schemas for login, registration, and blog posts using Zo
 
 ---
 
-### Session Management - src/actions/lib/sessions.js
+### Session Management - 'src/actions/lib/sessions.js'
 
 ### Purpose
 
@@ -401,7 +401,7 @@ Handles creation and verification of JWT-based sessions stored in HTTP-only cook
 
 ### Key Components:
 
-- encrypt(payload)
+- 'encrypt(payload)'
 
   - Signs a JWT token with HS256 algorithm.
 
