@@ -519,8 +519,10 @@ Retrieves and decrypts the currently authenticated user based on the "session" c
 
 Stores sensitive configuration variables.
 
+```
 DB_URI="mongodb+srv://username:password@cluster.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 SESSION_SECRET="random_secret_key_for_jwt"
+```
 
 - DB_URI - MongoDB connection string.
 
