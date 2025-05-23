@@ -186,6 +186,9 @@ From `package.json`:
 - Fetches posts for the authenticated user.
 - Renders `PostCard` components for each post.
 
+ 
+![Dashboard](/images/Dashboard.png)
+
 ---
 
 ### 8. `app/posts/create/edit/[id]/page.jsx`
@@ -193,6 +196,12 @@ From `package.json`:
 - Retrieves post by ID from the URL.
 - Ensures current user is the post's owner.
 - Renders `BlogForm` with existing post data.
+
+   
+![create page](/images/create.png)
+
+ 
+![Edit page](/images/Edit.png)
 
 ---
 
@@ -392,6 +401,9 @@ Defines data validation schemas for login, registration, and blog posts using Zo
     - Content: Required, non-empty.
 
     - Includes custom error messages.
+   
+   
+![Rules page](/images/rules.png)
 
 ---
 
@@ -488,7 +500,8 @@ Retrieves and decrypts the currently authenticated user based on the "session" c
   - Triggers cache revalidation on /dashboard.
 
   - Redirects to /dashboard.
-
+ 
+   
 ---
 
 ### Middleware - Route Protection -  `src/actions/middleware.js`
