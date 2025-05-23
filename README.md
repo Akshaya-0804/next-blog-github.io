@@ -124,7 +124,7 @@ From `package.json`:
   - Displays server-side validation errors.
   - Includes link to login page.
  
-![Register page] (images/register.png)
+![Register page](/images/register.png)
 
 ---
 
