@@ -123,6 +123,8 @@ From `package.json`:
   - Renders a form for user registration.
   - Displays server-side validation errors.
   - Includes link to login page.
+ 
+![Register page] (images/register.png)
 
 ---
 
